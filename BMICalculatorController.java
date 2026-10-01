@@ -31,7 +31,6 @@ public class BMICalculatorController implements ActionListener {
                 return;
             }
 
-            // FIXED: Standard conditional assignment using helper system constants
             int unit = metricBtn.isSelected() ? UnitSystem.METRIC : UnitSystem.ENGLISH;
 
             BMICalculator calc = new BMICalculator(weight, height, unit);
