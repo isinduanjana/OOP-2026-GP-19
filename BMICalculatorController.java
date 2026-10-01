@@ -2,14 +2,12 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class BMICalculatorController implements ActionListener {
-    // FIXED: Corrected the data types to match actual Swing components
     private JTextField weightField;
     private JTextField heightField;
     private JRadioButton englishBtn;
     private JRadioButton metricBtn;
     private JLabel resultLabel;
 
-    // FIXED: Rearranged constructor signatures to match the corrected types
     public BMICalculatorController(JTextField weightField, JTextField heightField,
                                    JRadioButton englishBtn, JRadioButton metricBtn,
                                    JLabel resultLabel) {
