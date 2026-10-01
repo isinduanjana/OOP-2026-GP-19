@@ -51,7 +51,7 @@ public class BMICalculatorApp extends JFrame {
 
         //connect controller
 
-        BMICalculatorControlloer controlloer = new BMICalculatorController(
+        BMICalculatorController controller = new BMICalculatorController(
                 weightField,
                 heightField,
                 englishBtn,
