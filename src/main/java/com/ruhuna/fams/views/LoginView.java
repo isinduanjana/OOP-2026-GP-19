@@ -6,10 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoginView extends JFrame {
-    private JTextField txtUsername;
-    private JPasswordField txtPassword;
-    private JButton btnLogin;
-    private AuthController authController;
+    private final JTextField txtUsername;
+    private final JPasswordField txtPassword;
+    private final AuthController authController;
 
     public LoginView() {
         authController = new AuthController();
@@ -28,14 +27,14 @@ public class LoginView extends JFrame {
 
         JLabel lblTitle1 = new JLabel("UNIVERSITY OF RUHUNA", SwingConstants.CENTER);
         lblTitle1.setFont(new Font("SansSerif", Font.BOLD, 16));
-
         JLabel lblTitle2 = new JLabel("FACULTY OF TECHNOLOGY", SwingConstants.CENTER);
         lblTitle2.setFont(new Font("SansSerif", Font.BOLD, 14));
-
         JLabel lblTitle3 = new JLabel("FACULTY ACADEMIC MANAGEMENT SYSTEM", SwingConstants.CENTER);
         lblTitle3.setFont(new Font("SansSerif", Font.PLAIN, 11));
 
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
         panel.add(lblTitle1, gbc);
         gbc.gridy = 1;
         panel.add(lblTitle2, gbc);
@@ -43,41 +42,78 @@ public class LoginView extends JFrame {
         panel.add(lblTitle3, gbc);
 
         gbc.gridwidth = 1;
-        gbc.gridy = 3; gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridx = 0;
         panel.add(new JLabel("Username:"), gbc);
         txtUsername = new JTextField(18);
         gbc.gridx = 1;
         panel.add(txtUsername, gbc);
 
-        gbc.gridy = 4; gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridx = 0;
         panel.add(new JLabel("Password:"), gbc);
         txtPassword = new JPasswordField(18);
         gbc.gridx = 1;
         panel.add(txtPassword, gbc);
 
-        btnLogin = new JButton("LOGIN");
+        JButton btnLogin = new JButton("LOGIN");
         btnLogin.setBackground(new Color(41, 128, 185));
         btnLogin.setForeground(Color.WHITE);
-        gbc.gridy = 5; gbc.gridx = 0; gbc.gridwidth = 2;
+        gbc.gridy = 5;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
         panel.add(btnLogin, gbc);
 
         add(panel, BorderLayout.CENTER);
 
-        btnLogin.addActionListener(e -> {
-            String username = txtUsername.getText();
-            String password = new String(txtPassword.getPassword());
+        btnLogin.addActionListener(e -> login());
+        txtPassword.addActionListener(e -> login());
+        getRootPane().setDefaultButton(btnLogin);
+    }
 
+    private void login() {
+        String username = txtUsername.getText().trim();
+        String password = new String(txtPassword.getPassword());
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Please enter both username and password.",
+                    "Missing Details", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
             User user = authController.login(username, password);
-            if (user != null) {
-                if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-                    new AdminDashboardView(user).setVisible(true);
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Logged in as " + user.getRole() + ". Module assigned to team member.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid Username or Password!", "Login Error", JOptionPane.ERROR_MESSAGE);
+            if (user == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Invalid username or password, or account is inactive.",
+                        "Login Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-        });
+
+            String role = user.getRole();
+            if (role == null) {
+                JOptionPane.showMessageDialog(this, "This account has no assigned role.",
+                        "Login Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if ("ADMIN".equalsIgnoreCase(role)) {
+                new AdminDashboardView(user).setVisible(true);
+                dispose();
+            } else if ("UNDERGRADUATE".equalsIgnoreCase(role)) {
+                new com.ruhuna.fams.views.student.StudentDashboardView(user).setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Login successful, but the " + role + " dashboard is not connected yet.",
+                        "Module Not Connected", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Could not log in. Check your database connection and AuthController.\nDetails: "
+                            + ex.getMessage(),
+                    "Login Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
