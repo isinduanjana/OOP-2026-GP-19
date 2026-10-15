@@ -25,10 +25,10 @@ public class StudentDashboardView extends JFrame {
         header.add(welcome, BorderLayout.EAST);
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("My Profile", new StudentProfilePanel(user.getUserId()));
+       /* tabs.addTab("My Profile", new StudentProfilePanel(user.getUserId()));
         tabs.addTab("Attendance", new StudentAttendancePanel(user.getUserId()));
         tabs.addTab("Grades", new StudentGradesPanel(user.getUserId()));
-        tabs.addTab("SGPA / CGPA", new StudentGpaPanel(user.getUserId()));
+        tabs.addTab("SGPA / CGPA", new StudentGpaPanel(user.getUserId()));*/
 
         JButton logout = new JButton("Logout");
         logout.addActionListener(e -> {
