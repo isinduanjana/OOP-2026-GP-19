@@ -2,8 +2,6 @@ package com.ruhuna.fams.views;
 
 import com.ruhuna.fams.controllers.AuthController;
 import com.ruhuna.fams.models.User;
-import com.ruhuna.fams.views.student.StudentDashboardView;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -70,7 +68,7 @@ public class LoginView extends JFrame {
             String password = new String(txtPassword.getPassword());
 
             User user = authController.login(username, password);
-           /* if (user != null) {
+            if (user != null) {
                 if ("ADMIN".equalsIgnoreCase(user.getRole())) {
                     new AdminDashboardView(user).setVisible(true);
                     this.dispose();
@@ -79,83 +77,7 @@ public class LoginView extends JFrame {
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid Username or Password!", "Login Error", JOptionPane.ERROR_MESSAGE);
-            }*/
+            }
         });
     }
-    private void loginStudent() {
-
-        String username = txtUsername.getText().trim();
-        String password = new String(txtPassword.getPassword());
-
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Please enter username and password.",
-                    "Missing Details",
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-
-        btnLogin.setEnabled(false);
-
-        try {
-            User user = authController.login(username, password);
-
-            if (user == null) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Invalid username or password.",
-                        "Login Failed",
-                        JOptionPane.ERROR_MESSAGE
-                );
-                return;
-            }
-
-            String role = user.getRole();
-
-            if (role == null) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "This account has no assigned role.",
-                        "Login Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
-                return;
-            }
-
-            if ("UNDERGRADUATE".equalsIgnoreCase(role.trim())) {
-
-                StudentDashboardView dashboard =
-                        new StudentDashboardView(user);
-
-                dashboard.setVisible(true);
-                dispose();
-
-            } else {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "This account belongs to: " + role
-                                + "\nPlease log in using a student account "
-                                + "with the UNDERGRADUATE role.",
-                        "Student Login",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Login error:\n" + ex.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-
-        } finally {
-            btnLogin.setEnabled(true);
-        }
-    }
 }
-
