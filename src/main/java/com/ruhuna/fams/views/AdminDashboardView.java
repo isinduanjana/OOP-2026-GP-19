@@ -8,13 +8,15 @@ import java.awt.*;
 public class AdminDashboardView extends JFrame {
     private User currentUser;
     private AdminController adminController;
+    private JPanel centerCardPanel;
+    private CardLayout cardLayout;
 
     public AdminDashboardView(User user) {
         this.currentUser = user;
         this.adminController = new AdminController();
 
         setTitle("Faculty Academic System - Admin Dashboard");
-        setSize(850, 550);
+        setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -22,7 +24,7 @@ public class AdminDashboardView extends JFrame {
         // Header Panel
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(52, 73, 94));
-        headerPanel.setPreferredSize(new Dimension(850, 50));
+        headerPanel.setPreferredSize(new Dimension(900, 50));
 
         JLabel lblTitle = new JLabel("  Faculty Academic System");
         lblTitle.setForeground(Color.WHITE);
@@ -46,28 +48,39 @@ public class AdminDashboardView extends JFrame {
         headerPanel.add(rightHeader, BorderLayout.EAST);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Sidebar Navigation
-        JPanel sidebar = new JPanel();
-        sidebar.setLayout(new GridLayout(8, 1, 5, 5));
-        sidebar.setBackground(new Color(236, 240, 241));
-        sidebar.setPreferredSize(new Dimension(180, 500));
+        // Dynamic Card Layout Center Panel
+        cardLayout = new CardLayout();
+        centerCardPanel = new JPanel(cardLayout);
 
-        String[] navButtons = {"Dashboard", "Users", "Courses", "Notices", "Timetable", "Reports", "Profile", "Logout"};
-        for (String btnText : navButtons) {
-            JButton btn = new JButton(btnText);
-            if (btnText.equals("Logout")) {
-                btn.addActionListener(e -> {
+        // Adding Views
+        centerCardPanel.add(createDashboardCardsPanel(), "Dashboard");
+        centerCardPanel.add(new UserManagementView(), "Users");
+
+
+        // Sidebar
+        JPanel sidebar = new JPanel(new GridLayout(8, 1, 5, 5));
+        sidebar.setBackground(new Color(236, 240, 241));
+        sidebar.setPreferredSize(new Dimension(180, 550));
+
+        String[] navs = {"Dashboard", "Users", "Courses", "Notices", "Timetable", "Logout"};
+        for (String nav : navs) {
+            JButton btn = new JButton(nav);
+            btn.addActionListener(e -> {
+                if (nav.equals("Logout")) {
                     new LoginView().setVisible(true);
                     this.dispose();
-                });
-            } else {
-                btn.addActionListener(e -> JOptionPane.showMessageDialog(this, btnText + " module clicked."));
-            }
+                } else {
+                    cardLayout.show(centerCardPanel, nav);
+                }
+            });
             sidebar.add(btn);
         }
-        add(sidebar, BorderLayout.WEST);
 
-        // Main Content Area
+        add(sidebar, BorderLayout.WEST);
+        add(centerCardPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel createDashboardCardsPanel() {
         JPanel mainContent = new JPanel(new GridLayout(2, 2, 15, 15));
         mainContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -76,7 +89,7 @@ public class AdminDashboardView extends JFrame {
         mainContent.add(createCard("NOTICES", String.valueOf(adminController.getCount("notices")), new Color(155, 89, 182)));
         mainContent.add(createCard("TIMETABLE", String.valueOf(adminController.getCount("timetables")), new Color(230, 126, 34)));
 
-        add(mainContent, BorderLayout.CENTER);
+        return mainContent;
     }
 
     private JPanel createCard(String title, String count, Color color) {
