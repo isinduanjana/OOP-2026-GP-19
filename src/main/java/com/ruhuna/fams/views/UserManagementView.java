@@ -16,7 +16,6 @@ public class UserManagementView extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // Top Header Section
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel lblTitle = new JLabel("User Management");
         lblTitle.setFont(new Font("SansSerif", Font.BOLD, 18));
@@ -29,7 +28,6 @@ public class UserManagementView extends JPanel {
         topPanel.add(btnAddUser, BorderLayout.EAST);
         add(topPanel, BorderLayout.NORTH);
 
-        // Search Section
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.add(new JLabel("Search User: "));
         JTextField txtSearch = new JTextField(20);
@@ -37,7 +35,6 @@ public class UserManagementView extends JPanel {
         searchPanel.add(txtSearch);
         searchPanel.add(btnSearch);
 
-        // Table Section
         String[] columns = {"ID", "Name", "Username", "Role", "Action"};
         tableModel = new DefaultTableModel(columns, 0);
         table = new JTable(tableModel);
@@ -48,10 +45,7 @@ public class UserManagementView extends JPanel {
         centerPanel.add(scrollPane, BorderLayout.CENTER);
         add(centerPanel, BorderLayout.CENTER);
 
-        // Load Users Data
         loadUserData();
-
-        // Add User Button Click Event (Wireframe 04 Dialog)
         btnAddUser.addActionListener(e -> showAddUserDialog());
     }
 
@@ -97,12 +91,12 @@ public class UserManagementView extends JPanel {
 
         btnSave.addActionListener(e -> {
             boolean success = userController.addUser(
-                    txtName.getText(),
-                    txtUsername.getText(),
-                    new String(txtPassword.getPassword()),
-                    txtEmail.getText(),
-                    cmbRole.getSelectedItem().toString(),
-                    cmbDept.getSelectedIndex() + 1
+                txtName.getText(),
+                txtUsername.getText(),
+                new String(txtPassword.getPassword()),
+                txtEmail.getText(),
+                cmbRole.getSelectedItem().toString(),
+                cmbDept.getSelectedIndex() + 1
             );
             if (success) {
                 JOptionPane.showMessageDialog(dialog, "User added successfully!");

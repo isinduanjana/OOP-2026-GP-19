@@ -21,7 +21,6 @@ public class AdminDashboardView extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Header Panel
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(52, 73, 94));
         headerPanel.setPreferredSize(new Dimension(900, 50));
@@ -48,16 +47,15 @@ public class AdminDashboardView extends JFrame {
         headerPanel.add(rightHeader, BorderLayout.EAST);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Dynamic Card Layout Center Panel
         cardLayout = new CardLayout();
         centerCardPanel = new JPanel(cardLayout);
 
-        // Adding Views
         centerCardPanel.add(createDashboardCardsPanel(), "Dashboard");
         centerCardPanel.add(new UserManagementView(), "Users");
+        centerCardPanel.add(new CourseManagementView(), "Courses");
+        centerCardPanel.add(new NoticeManagementView(currentUser), "Notices");
+        centerCardPanel.add(new TimetableManagementView(), "Timetable");
 
-
-        // Sidebar
         JPanel sidebar = new JPanel(new GridLayout(8, 1, 5, 5));
         sidebar.setBackground(new Color(236, 240, 241));
         sidebar.setPreferredSize(new Dimension(180, 550));
