@@ -287,13 +287,7 @@ public class LoginView extends JFrame {
                 new AdminDashboardView(user).setVisible(true);
                 dispose();
             } else if ("UNDERGRADUATE".equalsIgnoreCase(role)) {
-                new StudentDashboardView(user).setVisible(true);
-                dispose();
-            } else if ("TO".equalsIgnoreCase(role) || "TECHNICAL_OFFICER".equalsIgnoreCase(role) || "TECHNICAL OFFICER".equalsIgnoreCase(role)) {
-                new TODashboardView(user).setVisible(true);
-                dispose();
-            } else if ("LECTURER".equalsIgnoreCase(role)) {
-                new LecturerDashboardView(user).setVisible(true);
+                new com.ruhuna.fams.views.student.StudentDashboardView(user).setVisible(true);
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this,
