@@ -2,6 +2,9 @@ package com.ruhuna.fams.views;
 
 import com.ruhuna.fams.controllers.AuthController;
 import com.ruhuna.fams.models.User;
+import com.ruhuna.fams.views.lecturer.LecturerDashboardView;
+import com.ruhuna.fams.views.student.StudentDashboardView;
+import com.ruhuna.fams.views.to.TODashboardView;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;

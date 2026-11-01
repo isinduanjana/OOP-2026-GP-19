@@ -36,8 +36,8 @@ public class TODashboardView extends JFrame {
         CardLayout cardLayout = new CardLayout();
         JPanel centerPanel = new JPanel(cardLayout);
 
-        centerPanel.add(new TOAttendanceView(), "Attendance");
-        centerPanel.add(new TOMedicalView(), "Medical");
+        centerPanel.add(new TOAttendanceView(user), "Attendance");
+        centerPanel.add(new TOMedicalView(user), "Medical");
 
         JPanel sidebar = new JPanel(new GridLayout(6, 1, 5, 5));
         sidebar.setPreferredSize(new Dimension(180, 500));
