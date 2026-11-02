@@ -13,22 +13,7 @@ import lk.ac.ruh.fot.ams.model.User;
 import lk.ac.ruh.fot.ams.ui.BaseDashboard;
 import lk.ac.ruh.fot.ams.ui.Theme;
 
-/**
- * [M1 - ADMIN MODULE] Main window of the administrator.
- *
- * Connection to common: DashboardFactory creates this class by name (reflection) when an
- * ADMIN logs in and then calls init(); BaseDashboard.init() calls registerPages() below.
- * The side menu, header, page switching and log-out all come from BaseDashboard.
- *
- * Handout - Admin: create & maintain User Profiles, Courses, Notices and Timetables.
- *
- * OOP:
- *  - Inheritance : extends the abstract BaseDashboard (which extends JFrame).
- *  - Abstraction / Template Method: only the 3 abstract methods are implemented here.
- *  - Polymorphism: four different CrudPanel&lt;?&gt; subclasses are stored in one array and
- *                  registered the same way; AdminHomePanel.QuickActions is implemented
- *                  by an anonymous inner class.
- */
+
 public class AdminDashboard extends BaseDashboard {
 
     public static final String PAGE_HOME = "Dashboard";
@@ -88,7 +73,6 @@ public class AdminDashboard extends BaseDashboard {
         addPage(PAGE_PROFILE, "user", new AdminProfilePanel(user, accent));
     }
 
-    /** Quick action: switch to the page, then open its "Add" dialog. */
     private void openAndAdd(String page, CrudPanel<?> panel) {
         showPage(page);
         panel.openAddDialog();
