@@ -2,14 +2,7 @@ package lk.ac.ruh.fot.ams.lecturer;
 
 import lk.ac.ruh.fot.ams.exception.ValidationException;
 
-/**
- * [M2 - LECTURER MODULE] Thrown when a lecturer types a mark that is not between 0 and 100
- * (handout: "all marks are out of 100").
- *
- * OOP: Inheritance (extends the common ValidationException -> AppException, so the
- * common BasePanel.safe(...) helper catches it and shows a dialog),
- * Encapsulation (private fields with getters), Polymorphism (overrides getUserMessage()).
- */
+
 public class MarksOutOfRangeException extends ValidationException {
 
     public static final double MIN = 0;
@@ -32,7 +25,7 @@ public class MarksOutOfRangeException extends ValidationException {
         return enteredValue;
     }
 
-    /** Friendlier text for the dialog (overrides AppException.getUserMessage). */
+
     @Override
     public String getUserMessage() {
         return "Invalid mark for " + studentTg + ": " + trim(enteredValue)

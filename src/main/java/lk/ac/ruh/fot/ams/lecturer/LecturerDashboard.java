@@ -21,17 +21,7 @@ import lk.ac.ruh.fot.ams.ui.shared.AttendanceReportPanel;
 import lk.ac.ruh.fot.ams.ui.shared.NoticeBoardPanel;
 import lk.ac.ruh.fot.ams.ui.shared.TimetablePanel;
 
-/**
- * [M2 - LECTURER MODULE] Main window of the Lecturer.
- *
- * HOW IT CONNECTS TO COMMON: the common DashboardFactory loads this class by name
- * ("lk.ac.ruh.fot.ams.lecturer.LecturerDashboard"), calls this constructor and then
- * BaseDashboard.init(), which builds the side menu and calls registerPages() below.
- *
- * OOP: Inheritance (extends the abstract common BaseDashboard -> JFrame),
- * Polymorphism / Template Method (implements getRoleTitle, getAccentColor, registerPages),
- * Composition (the dashboard is made of page objects - every page is a BasePanel).
- */
+
 public class LecturerDashboard extends BaseDashboard {
 
     private final CourseDAO courseDAO = new CourseDAO();
