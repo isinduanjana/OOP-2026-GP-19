@@ -168,8 +168,7 @@ public class LoginFrame extends JFrame {
             }
         });
 
-        JLabel demo = UI.muted("<html>Sample logins (password <b>1234</b>): admin, lec.perera, to.kamal, tg1001</html>");
-        demo.setAlignmentX(LEFT_ALIGNMENT);
+
 
         form.add(welcome);
         form.add(Box.createVerticalStrut(4));
@@ -188,8 +187,7 @@ public class LoginFrame extends JFrame {
         form.add(status);
         form.add(Box.createVerticalStrut(20));
         form.add(settings);
-        form.add(Box.createVerticalStrut(10));
-        form.add(demo);
+
 
         loginButton.addActionListener(e -> login());
         outer.add(form);
