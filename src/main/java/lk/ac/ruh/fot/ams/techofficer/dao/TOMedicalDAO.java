@@ -16,18 +16,7 @@ import lk.ac.ruh.fot.ams.model.enums.MedicalStatus;
 import lk.ac.ruh.fot.ams.techofficer.DuplicateMedicalException;
 import lk.ac.ruh.fot.ams.techofficer.model.MedicalDecision;
 
-/**
- * [M3 - TECHNICAL OFFICER MODULE] Adds and maintains medical records and links
- * them to the matching absences (attendance.medical_id).
- *
- * Connection to common: "extends BaseDAO" (JDBC helpers + transactions) and
- * "implements CrudDAO<Medical>" (common generic CRUD interface); reuses the
- * common MedicalDAO.BASE_SELECT / mapMedical for reading.
- *
- * OOP: Inheritance, Abstraction (implements an interface), Polymorphism
- * (applyDecision works with any MedicalDecision), custom exception
- * (DuplicateMedicalException), JDBC transactions.
- */
+
 public class TOMedicalDAO extends BaseDAO implements CrudDAO<Medical> {
 
     // ================================================================= read
@@ -115,10 +104,7 @@ public class TOMedicalDAO extends BaseDAO implements CrudDAO<Medical> {
         });
     }
 
-    /**
-     * Applies an approve / reject / reset decision (polymorphism: the DAO does not
-     * know which concrete MedicalDecision it got).
-     */
+
     public void applyDecision(Medical m, MedicalDecision decision, int deciderUserId) throws AppException {
         if (!decision.isAllowedFor(m)) {
             throw new ValidationException("Status", "This medical is already " + m.getStatus() + ".");
