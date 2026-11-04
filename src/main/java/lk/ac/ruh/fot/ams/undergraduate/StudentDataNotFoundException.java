@@ -2,15 +2,6 @@ package lk.ac.ruh.fot.ams.undergraduate;
 
 import lk.ac.ruh.fot.ams.exception.AppException;
 
-/**
- * [M4 - UNDERGRADUATE MODULE] Thrown when the logged-in student's row in the
- * "undergraduates" table cannot be found (e.g. the admin deleted it while the
- * student was still logged in).
- *
- * OOP: Inheritance (extends the common AppException, so every page's safe(...)
- * helper from BasePanel catches it and shows a friendly dialog),
- * Polymorphism (overrides getUserMessage()), Encapsulation (private studentId).
- */
 public class StudentDataNotFoundException extends AppException {
 
     private final int studentId;

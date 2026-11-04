@@ -15,16 +15,6 @@ import lk.ac.ruh.fot.ams.model.User;
 import lk.ac.ruh.fot.ams.model.enums.MedicalStatus;
 import lk.ac.ruh.fot.ams.undergraduate.StudentDataNotFoundException;
 
-/**
- * [M4 - UNDERGRADUATE MODULE] Small read-only queries used only by the
- * Student Portal (home page counters, profile details, today's classes).
- *
- * OOP: Inheritance - "extends BaseDAO" from common, so every method is one
- * line using the inherited queryNumber(...) / queryList(...) helpers (they use
- * PreparedStatements and turn SQLException into DatabaseException).
- * Exception handling - requireStudent(...) throws our own
- * StudentDataNotFoundException when the student row is missing.
- */
 public class StudentPortalDAO extends BaseDAO {
 
     /** Same filter the common DAOs use for "courses of this academic year". */
@@ -32,10 +22,7 @@ public class StudentPortalDAO extends BaseDAO {
             "FROM enrollments e JOIN courses c ON c.course_id = e.course_id "
             + "WHERE e.student_id = ? AND e.academic_year = ? AND e.status <> 'WITHDRAWN'";
 
-    /**
-     * Re-reads the student (re-uses common UserDAO.BASE_SELECT + mapUser factory).
-     * @throws StudentDataNotFoundException if the row was deleted
-     */
+
     public Undergraduate requireStudent(int studentId) throws DatabaseException, StudentDataNotFoundException {
         User u = queryOne(UserDAO.BASE_SELECT + "WHERE s.student_id = ?", UserDAO::mapUser, studentId);
         if (!(u instanceof Undergraduate s)) {
@@ -73,10 +60,6 @@ public class StudentPortalDAO extends BaseDAO {
                 studentId, AppConfig.CURRENT_ACADEMIC_YEAR);
     }
 
-    /**
-     * Classes of the student on one weekday (e.g. "MONDAY"), ordered by time.
-     * Re-uses the common TimetableDAO.BASE_SELECT and its mapEntry row mapper.
-     */
     public List<TimetableEntry> findClassesOnDay(int studentId, String day) throws DatabaseException {
         return queryList(TimetableDAO.BASE_SELECT
                         + "WHERE t.day = ? AND t.course_id IN (SELECT e.course_id " + CURRENT_ENROLMENT + ") "

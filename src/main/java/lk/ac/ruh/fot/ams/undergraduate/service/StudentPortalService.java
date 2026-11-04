@@ -21,15 +21,6 @@ import lk.ac.ruh.fot.ams.service.ResultService;
 import lk.ac.ruh.fot.ams.undergraduate.dao.StudentPortalDAO;
 import lk.ac.ruh.fot.ams.undergraduate.model.StudentSnapshot;
 
-/**
- * [M4 - UNDERGRADUATE MODULE] Collects the data of the Student Home page
- * from the COMMON services (ResultService, AttendanceService, NoticeDAO,
- * CourseDAO) and our own StudentPortalDAO, and packs it in a StudentSnapshot.
- *
- * OOP: Encapsulation (the DAO / service objects are private), composition
- * (re-uses common objects instead of copying their logic), exception handling
- * (all methods declare AppException - the GUI shows it with safe(...)).
- */
 public class StudentPortalService {
 
     private static final int NOTICES_ON_HOME = 3;
@@ -65,10 +56,6 @@ public class StudentPortalService {
                 portalDAO.countEnrolledCredits(student.getStudentId()));
     }
 
-    /**
-     * Results of the courses followed THIS academic year, taken from the
-     * transcript (so they are not calculated twice).
-     */
     public List<CourseResult> currentResults(Undergraduate student, Transcript transcript) throws AppException {
         Set<Integer> currentIds = new HashSet<>();
         for (Course c : courseDAO.findByStudent(student.getStudentId())) currentIds.add(c.getCourseId());

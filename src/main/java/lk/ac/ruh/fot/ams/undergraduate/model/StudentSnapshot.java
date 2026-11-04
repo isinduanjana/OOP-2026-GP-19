@@ -15,17 +15,7 @@ import lk.ac.ruh.fot.ams.model.report.CourseResult;
 import lk.ac.ruh.fot.ams.model.report.SemesterResult;
 import lk.ac.ruh.fot.ams.model.report.Transcript;
 
-/**
- * [M4 - UNDERGRADUATE MODULE] Everything the Student Home page needs, loaded
- * ONCE by StudentPortalService and then handed to every home widget.
- *
- * It combines objects built by the common services (Transcript from
- * ResultService, AttendanceSummary from AttendanceService) and adds a few
- * calculated values (average attendance, eligible course count ...).
- *
- * OOP: Encapsulation - private fields, read-only getters, unmodifiable lists;
- * Classes & objects - one snapshot object per page load.
- */
+
 public class StudentSnapshot {
 
     private final Undergraduate student;
@@ -59,11 +49,6 @@ public class StudentSnapshot {
         return transcript.getCgpa();
     }
 
-    /**
-     * The semester the student is following now: the level/semester of this
-     * year's courses (a REPEAT student may be in Level 3 but repeating Level 2
-     * courses), otherwise the student's own level/semester.
-     */
     public SemesterResult getCurrentSemester() {
         int level = student.getLevel();
         int sem = student.getSemester();

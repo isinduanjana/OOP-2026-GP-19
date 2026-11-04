@@ -16,21 +16,6 @@ import lk.ac.ruh.fot.ams.undergraduate.ui.StudentMedicalsPanel;
 import lk.ac.ruh.fot.ams.undergraduate.ui.StudentProfilePanel;
 import lk.ac.ruh.fot.ams.undergraduate.ui.StudentResultsPanel;
 
-/**
- * [M4 - UNDERGRADUATE MODULE] Main window of the Student Portal.
- *
- * HOW IT CONNECTS TO COMMON: the common DashboardFactory loads this class by
- * name after an UNDERGRADUATE logs in, calls this constructor and then
- * BaseDashboard.init(), which calls our registerPages().
- *
- * Handout - an undergraduate can:
- *   see attendance, medicals, course details, grades &amp; GPA, timetable, notices,
- *   and update only contact details + profile picture.
- *
- * OOP: Inheritance (extends the abstract BaseDashboard), Polymorphism
- * (implements getRoleTitle / getAccentColor / registerPages; every page is used
- * as a BasePanel), Encapsulation (private DAO, private student field).
- */
 public class UndergraduateDashboard extends BaseDashboard {
 
     private final Undergraduate student;
