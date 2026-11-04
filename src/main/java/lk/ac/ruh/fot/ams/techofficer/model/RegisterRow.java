@@ -3,13 +3,7 @@ package lk.ac.ruh.fot.ams.techofficer.model;
 import lk.ac.ruh.fot.ams.model.enums.MedicalStatus;
 import lk.ac.ruh.fot.ams.model.enums.StudentType;
 
-/**
- * [M3 - TECHNICAL OFFICER MODULE] One line of the attendance register of a
- * session: an enrolled student + what is saved for them (if anything) + the
- * medical they submitted for that day (if any).
- *
- * OOP: Encapsulation (private fields, getters/setters, small helper methods).
- */
+
 public class RegisterRow {
 
     private int studentId;
