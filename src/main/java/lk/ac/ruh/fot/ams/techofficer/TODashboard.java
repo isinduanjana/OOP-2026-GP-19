@@ -17,24 +17,7 @@ import lk.ac.ruh.fot.ams.ui.shared.AttendanceReportPanel;
 import lk.ac.ruh.fot.ams.ui.shared.NoticeBoardPanel;
 import lk.ac.ruh.fot.ams.ui.shared.TimetablePanel;
 
-/**
- * [M3 - TECHNICAL OFFICER MODULE] Main window of the Technical Officer.
- *
- * Connection to common: the common DashboardFactory creates this class BY NAME
- * (reflection) when a TO logs in and calls init(); BaseDashboard.init() then
- * calls registerPages() below. Sidebar, header, page switching and logout all
- * come from the common BaseDashboard.
- *
- * Handout requirements covered:
- *   - update profile except username/password   -> My Profile (TOProfilePanel)
- *   - add & maintain attendance                  -> Mark Attendance, Attendance Report, Student Attendance
- *   - add & maintain medical details             -> Medicals
- *   - see notices                                -> Notices
- *   - see timetables of their department         -> Timetable
- *
- * OOP: Inheritance (extends BaseDashboard), Polymorphism (overrides the three
- * abstract methods; every page is a BasePanel), Encapsulation.
- */
+
 public class TODashboard extends BaseDashboard {
 
     private final TechnicalOfficer officer;
