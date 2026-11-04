@@ -34,13 +34,7 @@ import lk.ac.ruh.fot.ams.ui.components.StatCard;
 import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.Format;
 
-/**
- * [M2 - LECTURER MODULE] Lecturer home page: stat cards, my courses as tiles, a bar chart of
- * final-exam eligibility per course and the latest 3 notices.
- *
- * OOP: Inheritance (LecturerPage -> BasePanel), Composition (uses common ResultService,
- * NoticeDAO and M2 DAOs), Encapsulation (private helper methods build each part).
- */
+
 public class LecturerHomePanel extends LecturerPage {
 
     private final ResultService resultService = new ResultService();

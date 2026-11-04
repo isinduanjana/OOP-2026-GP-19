@@ -13,15 +13,7 @@ import lk.ac.ruh.fot.ams.model.Lecturer;
 import lk.ac.ruh.fot.ams.model.User;
 import lk.ac.ruh.fot.ams.util.Format;
 
-/**
- * [M2 - LECTURER MODULE] "My Profile" page - "Can update their profile except username and password".
- * Everything (form, picture, saving, locking) is inherited from the common AbstractProfilePanel,
- * which asks user.canEdit(field); Lecturer.canEdit returns false for USERNAME and PASSWORD,
- * so those are locked automatically. Here we only add the lecturer-specific details.
- *
- * OOP: Inheritance (extends the abstract common AbstractProfilePanel),
- * Abstraction / Polymorphism (implements the abstract getRoleDetails()).
- */
+
 public class LecturerProfilePanel extends lk.ac.ruh.fot.ams.ui.shared.AbstractProfilePanel {
 
     private final CourseDAO courseDAO = new CourseDAO();
