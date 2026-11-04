@@ -38,11 +38,7 @@ public class LecturerMarksDAO extends BaseDAO {
                 lecturerId, courseId) > 0;
     }
 
-    /**
-     * Saves all changed marks of one assessment in ONE transaction.
-     * @param marks studentId -> mark (null value = clear that student's mark)
-     * @return number of rows written
-     */
+
     public int saveMarks(int assessmentId, Map<Integer, Double> marks, int enteredByUserId) throws DatabaseException {
         int[] written = {0};
         inTransaction(c -> {
@@ -58,17 +54,17 @@ public class LecturerMarksDAO extends BaseDAO {
         return written[0];
     }
 
-    /** Upserts a single mark (used by the smoke test / quick edits). */
+
     public void saveMark(int assessmentId, int studentId, double mark, int enteredByUserId) throws DatabaseException {
         executeUpdate(UPSERT, assessmentId, studentId, mark, enteredByUserId);
     }
 
-    /** Removes one student's mark (the "Clear mark" button). */
+
     public void clearMark(int assessmentId, int studentId) throws DatabaseException {
         executeUpdate(DELETE, assessmentId, studentId);
     }
 
-    /** Average CA percentage of a course (CA marks / CA weight), used on the dashboard. */
+
     public double averageCaPercent(int courseId) throws DatabaseException {
         return queryNumber("SELECT AVG(x.ca) FROM (SELECT mk.student_id, "
                         + " SUM(mk.marks / a.max_marks * a.percentage) * 100 / "

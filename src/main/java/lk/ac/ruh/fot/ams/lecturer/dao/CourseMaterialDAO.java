@@ -8,14 +8,7 @@ import lk.ac.ruh.fot.ams.dao.CrudDAO;
 import lk.ac.ruh.fot.ams.exception.DatabaseException;
 import lk.ac.ruh.fot.ams.model.CourseMaterial;
 
-/**
- * [M2 - LECTURER MODULE] Add / edit / delete course materials
- * ("Can modify and add materials to courses").
- *
- * OOP: Inheritance (extends the common BaseDAO), Abstraction + Polymorphism
- * (implements the common generic CrudDAO&lt;CourseMaterial&gt; interface),
- * Reuse (rows are mapped with the common CourseDAO.mapMaterial).
- */
+
 public class CourseMaterialDAO extends BaseDAO implements CrudDAO<CourseMaterial> {
 
     private static final String SELECT =
@@ -38,7 +31,7 @@ public class CourseMaterialDAO extends BaseDAO implements CrudDAO<CourseMaterial
         return queryList(SELECT + "WHERE m.course_id = ? ORDER BY m.uploaded_at DESC", CourseDAO::mapMaterial, courseId);
     }
 
-    /** Number of materials in the lecturer's courses (dashboard). */
+
     public int countForLecturer(int lecturerId) throws DatabaseException {
         return (int) queryNumber("SELECT COUNT(*) FROM course_materials WHERE course_id IN "
                 + "(SELECT course_id FROM course_lecturers WHERE lecturer_id = ?)", lecturerId);
@@ -50,7 +43,7 @@ public class CourseMaterialDAO extends BaseDAO implements CrudDAO<CourseMaterial
                 + "VALUES (?, ?, ?, ?, NOW())", m.getCourseId(), m.getLecturerId(), m.getTitle(), m.getFilePath());
     }
 
-    /** Updates title and file; a new file also refreshes the upload time. */
+
     @Override
     public void update(CourseMaterial m) throws DatabaseException {
         executeUpdate("UPDATE course_materials SET title = ?, "
