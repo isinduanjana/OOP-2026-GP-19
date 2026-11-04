@@ -27,13 +27,7 @@ import lk.ac.ruh.fot.ams.ui.components.ModernButton;
 import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.Format;
 
-/**
- * [M2 - LECTURER MODULE] Read-only dialog with an undergraduate's profile and the courses
- * he/she is enrolled in this academic year.
- *
- * OOP: Inheritance (extends JDialog), Encapsulation (load() hides the DAO call and
- * reports errors with the common UI.error).
- */
+
 public class StudentDetailsDialog extends JDialog {
 
     private final Undergraduate student;

@@ -33,19 +33,7 @@ import lk.ac.ruh.fot.ams.ui.components.StatCard;
 import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.Format;
 
-/**
- * [M2 - LECTURER MODULE] "GPA (SGPA &amp; CGPA)" page - handout: "SGPA and CGPA with
- * subjects and grades for each undergraduate and for the whole batch".
- *
- *   top    : whole batch - SGPA of every semester, CGPA and class (common ResultService.getAllTranscripts)
- *   bottom : selected student's transcript (semester, course, credits, marks, grade, GP) + SGPA per semester
- *
- * The transcripts need many queries, so they are loaded in a SwingWorker (background
- * thread) while a "Loading..." label is shown - the window does not freeze.
- *
- * OOP: Inheritance (LecturerPage -> BasePanel), anonymous inner class (SwingWorker subclass),
- * Exception handling (ExecutionException unwrapped to the AppException that caused it).
- */
+
 public class GpaPanel extends LecturerPage {
 
     private static final String ALL_BATCHES = "All batches";

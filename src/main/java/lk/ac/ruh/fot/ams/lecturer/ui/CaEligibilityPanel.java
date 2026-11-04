@@ -30,16 +30,7 @@ import lk.ac.ruh.fot.ams.ui.components.StatCard;
 import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.Format;
 
-/**
- * [M2 - LECTURER MODULE] "CA &amp; Eligibility" page. Handout requirements:
- *   - CA marks as a summary for the whole batch and for individuals
- *   - eligible by CA (&gt;= 40%) to sit for the final
- *   - eligibility (attendance + CA) for individuals and the whole batch
- * All numbers come from the common ResultService (CourseResult objects).
- *
- * OOP: Inheritance + Polymorphism - extends the abstract ResultReportPanel and gives its
- * own renderBatch / renderIndividual.
- */
+
 public class CaEligibilityPanel extends ResultReportPanel {
 
     private final AssessmentDAO assessmentDAO = new AssessmentDAO();

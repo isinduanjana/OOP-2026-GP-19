@@ -35,17 +35,7 @@ import lk.ac.ruh.fot.ams.ui.components.ModernButton;
 import lk.ac.ruh.fot.ams.ui.components.StatCard;
 import lk.ac.ruh.fot.ams.ui.components.UI;
 
-/**
- * [M2 - LECTURER MODULE] "Marks Entry" page - "Can upload marks for all kind of exams"
- * (quizzes, assignments, mid, final; all marks out of 100).
- *
- * Flow: choose course + assessment -> type marks in the "Mark /100" column -> Save all.
- * Every typed value is checked by MarkParser (throws our MarksOutOfRangeException);
- * all rows are saved in ONE transaction by LecturerMarksDAO.
- *
- * OOP: Inheritance (LecturerPage -> BasePanel), Encapsulation (private state),
- * Exception handling (custom MarksOutOfRangeException shown through safe()).
- */
+
 public class MarksEntryPanel extends LecturerPage {
 
     private static final int COL_MARK = 4;

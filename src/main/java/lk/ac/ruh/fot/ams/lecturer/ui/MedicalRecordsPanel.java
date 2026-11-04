@@ -29,13 +29,7 @@ import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.FileUtil;
 import lk.ac.ruh.fot.ams.util.Format;
 
-/**
- * [M2 - LECTURER MODULE] "Medical Records" page - "Can see attendance and medical records
- * of undergraduates". READ-ONLY for the lecturer (approval is done by the TO in M3).
- * Data comes from the common MedicalDAO.findByCourse for each of my courses.
- *
- * OOP: Inheritance (LecturerPage -> BasePanel), Encapsulation, use of enums (MedicalStatus).
- */
+
 public class MedicalRecordsPanel extends LecturerPage {
 
     private static final String ALL_COURSES = "All my courses";

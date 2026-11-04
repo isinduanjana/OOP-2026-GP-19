@@ -27,19 +27,7 @@ import lk.ac.ruh.fot.ams.ui.components.Avatar;
 import lk.ac.ruh.fot.ams.ui.components.CardPanel;
 import lk.ac.ruh.fot.ams.ui.components.UI;
 
-/**
- * [M2 - LECTURER MODULE] Abstract "report" page with the controls shared by the
- * CA &amp; Eligibility page and the Results &amp; Grades page:
- *     Course [combo]   Show (o) Whole batch  ( ) Individual [student combo]
- *
- * It decides WHEN to draw (Template Method render()), subclasses decide WHAT to draw:
- *     renderBatch(course)               - whole batch view
- *     renderIndividual(course, student) - one undergraduate
- *
- * OOP: Abstraction (2 abstract methods), Inheritance (extends LecturerPage -> BasePanel),
- * Polymorphism (render() calls the subclass version), Encapsulation (private controls,
- * protected accessors only).
- */
+
 public abstract class ResultReportPanel extends LecturerPage {
 
     protected final ResultService resultService = new ResultService();
