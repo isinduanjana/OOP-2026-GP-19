@@ -7,13 +7,7 @@ import lk.ac.ruh.fot.ams.dao.BaseDAO;
 import lk.ac.ruh.fot.ams.exception.DatabaseException;
 import lk.ac.ruh.fot.ams.model.report.CourseResult;
 
-/**
- * [M2 - LECTURER MODULE] Publishes the calculated grades of a course into the "grades" table
- * (the common GradeDAO reads them back for transcripts / previous semesters).
- *
- * OOP: Inheritance (extends the common BaseDAO -> inTransaction() + update()),
- * Exception handling (whole publish is rolled back if one row fails).
- */
+
 public class GradePublishDAO extends BaseDAO {
 
     private static final String UPSERT =
@@ -22,10 +16,7 @@ public class GradePublishDAO extends BaseDAO {
             + "total_marks = VALUES(total_marks), grade = VALUES(grade), grade_point = VALUES(grade_point), "
             + "remarks = VALUES(remarks)";
 
-    /**
-     * Upserts every result that already has a grade, in one transaction.
-     * @return number of grades published
-     */
+
     public int publish(List<CourseResult> results) throws DatabaseException {
         int[] count = {0};
         inTransaction(c -> {
@@ -41,7 +32,7 @@ public class GradePublishDAO extends BaseDAO {
         return count[0];
     }
 
-    /** How many grades of this course are already stored in the grades table. */
+
     public int countPublished(int courseId) throws DatabaseException {
         return (int) queryNumber("SELECT COUNT(*) FROM grades WHERE course_id = ? AND academic_year = ?",
                 courseId, AppConfig.CURRENT_ACADEMIC_YEAR);
