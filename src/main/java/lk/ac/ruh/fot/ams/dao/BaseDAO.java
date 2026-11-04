@@ -18,21 +18,8 @@ import java.util.List;
 import lk.ac.ruh.fot.ams.db.DBConnection;
 import lk.ac.ruh.fot.ams.exception.DatabaseException;
 
-/**
- * [COMMON PART] Abstract parent of EVERY DAO class in the project
- * (common, M1, M2, M3 and M4 DAOs all "extends BaseDAO").
- *
- * It hides all JDBC boiler-plate (PreparedStatement, binding parameters,
- * closing resources, converting SQLException) so a DAO method is one line:
- *
- *     return queryList("SELECT ... WHERE course_id=?", this::mapCourse, courseId);
- *
- * OOP: Abstraction + Inheritance (protected helper methods are inherited),
- *      Encapsulation (bind() is private), Exception handling.
- */
 public abstract class BaseDAO {
 
-    /** Work executed inside a database transaction. */
     @FunctionalInterface
     protected interface TransactionWork {
         void run(Connection connection) throws SQLException, DatabaseException;
@@ -42,7 +29,6 @@ public abstract class BaseDAO {
         return DBConnection.getInstance().getConnection();
     }
 
-    /** SELECT returning many rows. */
     protected <T> List<T> queryList(String sql, RowMapper<T> mapper, Object... params) throws DatabaseException {
         List<T> list = new ArrayList<>();
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
