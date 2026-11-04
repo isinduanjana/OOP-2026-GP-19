@@ -25,25 +25,10 @@ import lk.ac.ruh.fot.ams.model.enums.MedicalStatus;
 import lk.ac.ruh.fot.ams.techofficer.SessionLimitExceededException;
 import lk.ac.ruh.fot.ams.techofficer.model.RegisterRow;
 
-/**
- * [M3 - TECHNICAL OFFICER MODULE] Adds and maintains attendance (the common
- * AttendanceDAO is read-only, so all WRITES to attendance_sessions / attendance
- * happen here).
- *
- * Connection to common: "extends BaseDAO" -> inherits queryList / queryOne /
- * queryNumber / executeUpdate / executeInsert / inTransaction, so this class has
- * no JDBC boiler-plate; reuses AttendanceDAO.mapSession and StudentDAO.findByCourse.
- *
- * OOP: Inheritance, Encapsulation (validation rules are private helpers),
- * Exception handling (custom SessionLimitExceededException), JDBC transactions.
- */
+
 public class TOAttendanceDAO extends BaseDAO {
 
-    /**
-     * Picks THE medical that covers one attendance row (same student, same date,
-     * same course or a whole-day medical). Approved first, then pending, then rejected;
-     * a course-specific medical wins over a whole-day one. Used by both M3 DAOs.
-     */
+
     static final String BEST_MEDICAL_SUBQUERY =
             "(SELECT m.medical_id FROM medicals m WHERE m.student_id = a.student_id "
             + " AND m.medical_date = ses.session_date AND (m.course_id IS NULL OR m.course_id = ses.course_id) "
@@ -71,10 +56,6 @@ public class TOAttendanceDAO extends BaseDAO {
                 courseId, component);
     }
 
-    /**
-     * Smallest free session number (1..15) of a course component.
-     * @throws SessionLimitExceededException when all 15 sessions already exist
-     */
     public int nextSessionNumber(Course course, Component component) throws AppException {
         Set<Integer> used = new HashSet<>(queryList(
                 "SELECT session_number FROM attendance_sessions WHERE course_id = ? AND component = ?",
@@ -159,12 +140,7 @@ public class TOAttendanceDAO extends BaseDAO {
         return rows;
     }
 
-    /**
-     * Saves the whole register in ONE transaction (all rows or none).
-     * Absent students are automatically linked to a medical of that day;
-     * present students never keep a medical link.
-     * @param presentByStudent studentId -> true (present) / false (absent)
-     */
+
     public void saveRegister(int sessionId, Map<Integer, Boolean> presentByStudent) throws DatabaseException {
         inTransaction(c -> {
             for (Map.Entry<Integer, Boolean> e : presentByStudent.entrySet()) {
