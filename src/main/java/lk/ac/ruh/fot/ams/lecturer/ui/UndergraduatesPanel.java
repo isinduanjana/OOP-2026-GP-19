@@ -27,14 +27,7 @@ import lk.ac.ruh.fot.ams.ui.components.StatCard;
 import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.Format;
 
-/**
- * [M2 - LECTURER MODULE] "Undergraduates" page - "Can see undergraduate details".
- * Shows students of my courses (or all undergraduates), with search; double-click
- * opens StudentDetailsDialog.
- *
- * OOP: Inheritance (LecturerPage -> BasePanel), Encapsulation, reuse of the common
- * StudentDAO and of the polymorphic UserDAO.mapUser (rows come back as Undergraduate objects).
- */
+
 public class UndergraduatesPanel extends LecturerPage {
 
     private static final String MINE = "Students in my courses";

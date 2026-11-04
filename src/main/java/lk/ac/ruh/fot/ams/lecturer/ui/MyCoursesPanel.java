@@ -29,15 +29,7 @@ import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.FileUtil;
 import lk.ac.ruh.fot.ams.util.Format;
 
-/**
- * [M2 - LECTURER MODULE] "My Courses &amp; Materials" page - "Can modify and add materials to courses".
- *   top    : table of my courses (common CourseDAO.findByLecturer)
- *   bottom : details of the selected course (+ Edit description) and its materials
- *            with Add / Edit / Delete / Open (CourseMaterialDAO + common FileUtil).
- *
- * OOP: Inheritance (LecturerPage -> BasePanel), Composition (uses DAO objects and
- * MaterialDialog), Exception handling via safe().
- */
+
 public class MyCoursesPanel extends LecturerPage {
 
     private final CourseMaterialDAO materialDAO = new CourseMaterialDAO();

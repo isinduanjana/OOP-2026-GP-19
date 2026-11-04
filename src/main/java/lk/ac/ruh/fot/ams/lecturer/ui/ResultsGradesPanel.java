@@ -32,15 +32,7 @@ import lk.ac.ruh.fot.ams.ui.components.StatCard;
 import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.Format;
 
-/**
- * [M2 - LECTURER MODULE] "Results &amp; Grades" page. Handout requirements:
- *   - final marks, marks and grades for each subject - individuals and whole batch
- *   - grades per UGC Commission Circular 12-2024 (common GradeScale enum)
- * plus "Publish grades" which stores the results in the grades table (GradePublishDAO).
- *
- * OOP: Inheritance + Polymorphism (second subclass of the abstract ResultReportPanel),
- * Strategy (GradePolicy picks Standard / Repeat rule for the explanation column).
- */
+
 public class ResultsGradesPanel extends ResultReportPanel {
 
     private final AssessmentDAO assessmentDAO = new AssessmentDAO();

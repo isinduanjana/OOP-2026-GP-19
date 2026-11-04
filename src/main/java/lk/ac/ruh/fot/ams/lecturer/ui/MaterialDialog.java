@@ -22,14 +22,7 @@ import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.FileUtil;
 import lk.ac.ruh.fot.ams.util.Validator;
 
-/**
- * [M2 - LECTURER MODULE] Modal dialog to add a new course material or edit one
- * (title and/or replace the file). The chosen file is copied with the common
- * FileUtil.copyToUploads(file, FileUtil.MATERIALS).
- *
- * OOP: Inheritance (extends JDialog), Encapsulation (the result is read through
- * getMaterial()), Exception handling (ValidationException / AppException shown in a dialog).
- */
+
 public class MaterialDialog extends JDialog {
 
     private final JTextField titleField = UI.textField(28);
