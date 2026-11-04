@@ -26,14 +26,7 @@ import lk.ac.ruh.fot.ams.ui.BasePanel;
 import lk.ac.ruh.fot.ams.ui.components.StatCard;
 import lk.ac.ruh.fot.ams.ui.components.UI;
 
-/**
- * [M2 - LECTURER MODULE] Abstract parent of the lecturer's own pages. It adds lecturer
- * helpers on top of the common BasePanel (which already gives user, accent, safe(...)).
- *
- * OOP: Abstraction (abstract - getTitle()/refresh() are still left to the subclasses),
- * Multi-level inheritance (BasePanel -> LecturerPage -> ResultReportPanel -> CaEligibilityPanel),
- * Encapsulation (the cast to Lecturer is done in one place).
- */
+
 public abstract class LecturerPage extends BasePanel {
 
     protected final CourseDAO courseDAO = new CourseDAO();

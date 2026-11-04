@@ -6,14 +6,7 @@ import java.util.Map;
 import lk.ac.ruh.fot.ams.dao.BaseDAO;
 import lk.ac.ruh.fot.ams.exception.DatabaseException;
 
-/**
- * [M2 - LECTURER MODULE] Writes marks of an assessment ("Can upload marks for all kind of exams").
- * The common AssessmentDAO is read-only; entering marks is M2's job.
- *
- * OOP: Inheritance (extends the common BaseDAO -> gets queryList(), queryNumber(),
- * inTransaction() and the static update() helper), Encapsulation (SQL kept private),
- * Exception handling (SQLException is turned into DatabaseException by BaseDAO).
- */
+
 public class LecturerMarksDAO extends BaseDAO {
 
     private static final String UPSERT =
@@ -22,7 +15,7 @@ public class LecturerMarksDAO extends BaseDAO {
 
     private static final String DELETE = "DELETE FROM marks WHERE assessment_id = ? AND student_id = ?";
 
-    /** @return studentId -> mark for one assessment. */
+
     public Map<Integer, Double> findMarks(int assessmentId) throws DatabaseException {
         Map<Integer, Double> map = new HashMap<>();
         queryList("SELECT student_id, marks FROM marks WHERE assessment_id = ?", rs -> {
@@ -32,7 +25,7 @@ public class LecturerMarksDAO extends BaseDAO {
         return map;
     }
 
-    /** True when the lecturer is assigned to the course (security check before saving). */
+
     public boolean teaches(int lecturerId, int courseId) throws DatabaseException {
         return queryNumber("SELECT COUNT(*) FROM course_lecturers WHERE lecturer_id = ? AND course_id = ?",
                 lecturerId, courseId) > 0;
