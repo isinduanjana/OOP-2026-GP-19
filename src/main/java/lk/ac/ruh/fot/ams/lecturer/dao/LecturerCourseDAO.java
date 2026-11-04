@@ -11,16 +11,10 @@ import lk.ac.ruh.fot.ams.exception.DatabaseException;
 import lk.ac.ruh.fot.ams.exception.ValidationException;
 import lk.ac.ruh.fot.ams.model.Undergraduate;
 
-/**
- * [M2 - LECTURER MODULE] Lecturer-specific course queries: student counts, the students
- * the lecturer teaches, and editing a course description.
- *
- * OOP: Inheritance (extends the common BaseDAO), Reuse of the common UserDAO.BASE_SELECT /
- * UserDAO.mapUser (which builds the correct User subclass - polymorphism).
- */
+
 public class LecturerCourseDAO extends BaseDAO {
 
-    /** @return courseId -> number of students enrolled this academic year, for the lecturer's courses. */
+
     public Map<Integer, Integer> studentCounts(int lecturerId) throws DatabaseException {
         Map<Integer, Integer> map = new HashMap<>();
         queryList("SELECT e.course_id, COUNT(*) FROM enrollments e "
@@ -32,7 +26,7 @@ public class LecturerCourseDAO extends BaseDAO {
         return map;
     }
 
-    /** Distinct undergraduates enrolled (this year) in any of the lecturer's courses. */
+
     public List<Undergraduate> findMyStudents(int lecturerId) throws DatabaseException {
         List<Undergraduate> list = new java.util.ArrayList<>();
         queryList(UserDAO.BASE_SELECT + "WHERE s.student_id IN (SELECT e.student_id FROM enrollments e "
@@ -43,7 +37,7 @@ public class LecturerCourseDAO extends BaseDAO {
         return list;
     }
 
-    /** Lecturer may modify the description of a course he/she teaches. */
+
     public void updateDescription(int courseId, int lecturerId, String description)
             throws DatabaseException, ValidationException {
         boolean teaches = queryNumber("SELECT COUNT(*) FROM course_lecturers WHERE course_id = ? AND lecturer_id = ?",
