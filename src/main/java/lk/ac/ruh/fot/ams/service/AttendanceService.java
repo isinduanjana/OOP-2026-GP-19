@@ -16,12 +16,7 @@ import lk.ac.ruh.fot.ams.model.report.AttendanceRecord;
 import lk.ac.ruh.fot.ams.model.report.AttendanceSummary;
 import lk.ac.ruh.fot.ams.model.report.ComponentAttendance;
 
-/**
- * [COMMON PART] Builds attendance summaries (handout section "attendance"):
- *  - whole batch or individual,
- *  - theory only, practical only, or combined,
- *  - with / without approved medicals, and 80% eligibility.
- */
+
 public class AttendanceService {
 
     private final AttendanceDAO attendanceDAO = new AttendanceDAO();

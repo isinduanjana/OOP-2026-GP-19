@@ -13,11 +13,7 @@ import lk.ac.ruh.fot.ams.model.enums.MedicalStatus;
 import lk.ac.ruh.fot.ams.model.report.AttendanceRecord;
 import lk.ac.ruh.fot.ams.model.report.ComponentAttendance;
 
-/**
- * [COMMON PART] READ-ONLY attendance queries used for reports
- * (Lecturer M2, Technical Officer M3, Undergraduate M4).
- * Adding / editing attendance is done by M3's TOAttendanceDAO.
- */
+
 public class AttendanceDAO extends BaseDAO {
 
     /** Sessions of a course (optionally only one component) with present/absent counts. */
@@ -33,11 +29,7 @@ public class AttendanceDAO extends BaseDAO {
                 : queryList(sql, AttendanceDAO::mapSession, courseId, component);
     }
 
-    /**
-     * Per-student attendance counts of a course.
-     * @return studentId -> {theory stats, practical stats}
-     */
-    public Map<Integer, Map<Component, ComponentAttendance>> findCourseStats(int courseId) throws DatabaseException {
+public Map<Integer, Map<Component, ComponentAttendance>> findCourseStats(int courseId) throws DatabaseException {
         // 1) how many sessions were held per component
         Map<Component, int[]> held = new HashMap<>();   // component -> {count, hours}
         queryList("SELECT component, COUNT(*) AS cnt, MAX(hours) AS hrs FROM attendance_sessions "

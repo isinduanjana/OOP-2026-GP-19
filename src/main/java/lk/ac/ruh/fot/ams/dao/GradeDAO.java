@@ -5,11 +5,6 @@ import java.util.Map;
 
 import lk.ac.ruh.fot.ams.exception.DatabaseException;
 
-/**
- * [COMMON PART] Reads published / historical grades from the grades table
- * (previous semesters). Current-semester grades are calculated live from
- * marks by ResultService; M2 can publish them into this table.
- */
 public class GradeDAO extends BaseDAO {
 
     /** A stored grade row. */
