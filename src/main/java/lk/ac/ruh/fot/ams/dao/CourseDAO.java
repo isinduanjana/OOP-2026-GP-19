@@ -63,7 +63,7 @@ public class CourseDAO extends BaseDAO {
                         + "JOIN courses c ON c.course_id = m.course_id "
                         + "LEFT JOIN lecturers l ON l.lecturer_id = m.lecturer_id "
                         + "LEFT JOIN user_profiles p ON p.user_id = l.user_id "
-                        + "WHERE m.course_id = ? ORDER BY m.uploaded_at DESC",
+                        + "WHERE m.course_id = ? ORDER BY m.covers_from IS NULL, m.covers_from, m.uploaded_at DESC",
                 CourseDAO::mapMaterial, courseId);
     }
 
@@ -93,6 +93,8 @@ public class CourseDAO extends BaseDAO {
         m.setLecturerName(rs.getString("lecturer_name"));
         m.setTitle(rs.getString("title"));
         m.setFilePath(rs.getString("file_path"));
+        m.setCoversFrom(getDate(rs, "covers_from"));   // date range the material covers
+        m.setCoversTo(getDate(rs, "covers_to"));
         m.setUploadedAt(getDateTime(rs, "uploaded_at"));
         return m;
     }

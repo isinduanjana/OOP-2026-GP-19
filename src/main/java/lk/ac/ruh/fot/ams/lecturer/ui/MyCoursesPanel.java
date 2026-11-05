@@ -29,7 +29,15 @@ import lk.ac.ruh.fot.ams.ui.components.UI;
 import lk.ac.ruh.fot.ams.util.FileUtil;
 import lk.ac.ruh.fot.ams.util.Format;
 
-
+/**
+ * [M2 - LECTURER MODULE] "My Courses &amp; Materials" page - "Can modify and add materials to courses".
+ *   top    : table of my courses (common CourseDAO.findByLecturer)
+ *   bottom : details of the selected course (+ Edit description) and its materials
+ *            with Add / Edit / Delete / Open (CourseMaterialDAO + common FileUtil).
+ *
+ * OOP: Inheritance (LecturerPage -> BasePanel), Composition (uses DAO objects and
+ * MaterialDialog), Exception handling via safe().
+ */
 public class MyCoursesPanel extends LecturerPage {
 
     private final CourseMaterialDAO materialDAO = new CourseMaterialDAO();
@@ -38,7 +46,8 @@ public class MyCoursesPanel extends LecturerPage {
     private final DataTableModel courseModel = new DataTableModel("Code", "Course name", "Credits", "Level / Sem",
             "Components", "Students", "Lecturers");
     private final JTable courseTable = UI.table(courseModel);
-    private final DataTableModel materialModel = new DataTableModel("Title", "File", "Uploaded", "By", "On disk");
+    private final DataTableModel materialModel = new DataTableModel("Title", "Covers", "File", "Uploaded",
+            "By", "On disk");
     private final JTable materialTable = UI.table(materialModel);
 
     private final JPanel detailsGrid = new JPanel(new GridBagLayout());
@@ -80,7 +89,8 @@ public class MyCoursesPanel extends LecturerPage {
         detailsCard.setPreferredSize(new Dimension(460, 330));
 
         // ---- materials
-        UI.setColumnWidths(materialTable, 190, 150, 125, 110, 65);
+        UI.setColumnWidths(materialTable, 150, 120, 110, 95, 90, 55);
+        materialTable.getColumnModel().getColumn(1).setMinWidth(118);   // "Covers" dates always fully visible
         ModernButton add = accentButton("Add material", "plus");
         add.addActionListener(e -> addMaterial());
         ModernButton edit = UI.secondary("Edit", "edit");
@@ -191,7 +201,7 @@ public class MyCoursesPanel extends LecturerPage {
             description.setCaretPosition(0);
             safe(() -> {
                 for (CourseMaterial m : materialDAO.findByCourse(c.getCourseId())) {
-                    materialModel.addRow(m, m.getTitle(), MaterialDialog.shortName(m.getFilePath()),
+                    materialModel.addRow(m, m.getTitle(), m.getCoverageShort(), MaterialDialog.shortName(m.getFilePath()),
                             Format.dateTime(m.getUploadedAt()), Format.nullToDash(m.getLecturerName()),
                             FileUtil.exists(m.getFilePath()) ? "Yes" : "Missing");
                 }

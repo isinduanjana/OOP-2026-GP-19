@@ -56,7 +56,7 @@ public class StudentCoursesPanel extends StudentViewPanel {
     private final JTable courseTable = UI.table(courseModel);
 
     private final DataTableModel schemeModel = new DataTableModel("Assessment", "Type", "Weight %", "Part");
-    private final DataTableModel materialModel = new DataTableModel("Title", "Uploaded by", "Uploaded", "File");
+    private final DataTableModel materialModel = new DataTableModel("Title", "Covers", "Uploaded by", "File");
     private final JTable materialTable = UI.table(materialModel);
 
     private final JLabel detailTitle = UI.heading("Select a course");
@@ -124,7 +124,8 @@ public class StudentCoursesPanel extends StudentViewPanel {
         left.add(scheme, BorderLayout.CENTER);
 
         JPanel right = StudentUI.clear(0, 8);
-        UI.setColumnWidths(materialTable, 230, 140, 110, 160);
+        UI.setColumnWidths(materialTable, 170, 120, 120, 140);
+        materialTable.getColumnModel().getColumn(1).setMinWidth(118);   // "Covers" dates always fully visible
         materialTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -241,8 +242,8 @@ public class StudentCoursesPanel extends StudentViewPanel {
                     : "CA " + Format.num(ca) + "%  +  Final " + Format.num(total - ca) + "%");
 
             for (CourseMaterial m : courseDAO.findMaterials(c.getCourseId())) {
-                materialModel.addRow(m, m.getTitle(), Format.nullToDash(m.getLecturerName()),
-                        Format.dateTime(m.getUploadedAt()), StudentUI.fileName(m.getFilePath()));
+                materialModel.addRow(m, m.getTitle(), m.getCoverageShort(), Format.nullToDash(m.getLecturerName()),
+                        StudentUI.fileName(m.getFilePath()));
             }
             materialModel.refresh();
             openButton.setEnabled(materialModel.getRowCount() > 0);
