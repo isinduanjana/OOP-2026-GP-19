@@ -31,7 +31,8 @@ public class TOAttendanceDAO extends BaseDAO {
 
     static final String BEST_MEDICAL_SUBQUERY =
             "(SELECT m.medical_id FROM medicals m WHERE m.student_id = a.student_id "
-            + " AND m.medical_date = ses.session_date AND (m.course_id IS NULL OR m.course_id = ses.course_id) "
+            + " AND ses.session_date BETWEEN m.from_date AND m.to_date "
+            + " AND (m.course_id IS NULL OR m.course_id = ses.course_id) "
             + " ORDER BY FIELD(m.status, 'APPROVED', 'PENDING', 'REJECTED'), m.course_id IS NULL, m.medical_id LIMIT 1)";
 
     private static final String SESSION_SELECT = "SELECT ses.*, c.course_code, "
@@ -115,7 +116,7 @@ public class TOAttendanceDAO extends BaseDAO {
 
         // medicals submitted for that day (best one per student comes first)
         Map<Integer, MedicalStatus> dayMedicals = new HashMap<>();
-        queryList("SELECT m.student_id, m.status FROM medicals m WHERE m.medical_date = ? "
+        queryList("SELECT m.student_id, m.status FROM medicals m WHERE ? BETWEEN m.from_date AND m.to_date "
                 + "AND (m.course_id IS NULL OR m.course_id = ?) "
                 + "ORDER BY FIELD(m.status, 'APPROVED', 'PENDING', 'REJECTED'), m.course_id IS NULL, m.medical_id", rs -> {
                     dayMedicals.putIfAbsent(rs.getInt("student_id"), MedicalStatus.valueOf(rs.getString("status")));
@@ -160,11 +161,11 @@ public class TOAttendanceDAO extends BaseDAO {
                 + "WHERE a.session_id = ?", sessionId);
     }
 
-    /** Re-computes attendance.medical_id for all sessions of one student on one date. */
-    static void relinkStudentDay(Connection c, int studentId, LocalDate date) throws SQLException {
+    /** Re-computes attendance.medical_id for all sessions of one student within a date range. */
+    static void relinkStudentRange(Connection c, int studentId, LocalDate fromDate, LocalDate toDate) throws SQLException {
         update(c, "UPDATE attendance a JOIN attendance_sessions ses ON ses.session_id = a.session_id "
                 + "SET a.medical_id = CASE WHEN a.status = 'ABSENT' THEN " + BEST_MEDICAL_SUBQUERY + " ELSE NULL END "
-                + "WHERE a.student_id = ? AND ses.session_date = ?", studentId, date);
+                + "WHERE a.student_id = ? AND ses.session_date BETWEEN ? AND ?", studentId, fromDate, toDate);
     }
 
     // ================================================================= dashboard / profile numbers

@@ -47,6 +47,9 @@ public class MedicalDAO extends BaseDAO {
         m.setCourseId(getInteger(rs, "course_id"));
         m.setCourseCode(rs.getString("course_code"));
         m.setMedicalDate(getDate(rs, "medical_date"));
+        m.setFromDate(getDate(rs, "from_date"));
+        m.setToDate(getDate(rs, "to_date"));
+        m.setSubmittedAt(getDateTime(rs, "created_at"));
         m.setReason(rs.getString("reason"));
         m.setDocumentPath(rs.getString("document_path"));
         m.setStatus(MedicalStatus.valueOf(rs.getString("status")));

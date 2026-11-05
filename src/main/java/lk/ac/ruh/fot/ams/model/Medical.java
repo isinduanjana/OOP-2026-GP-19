@@ -14,7 +14,10 @@ public class Medical {
     private String studentName;
     private Integer courseId;        // null = all courses on that day
     private String courseCode;
-    private LocalDate medicalDate;
+    private LocalDate medicalDate; // compatibility: same as fromDate
+    private LocalDate fromDate;
+    private LocalDate toDate;
+    private LocalDateTime submittedAt;
     private String reason;
     private String documentPath;
     private MedicalStatus status = MedicalStatus.PENDING;
@@ -46,6 +49,15 @@ public class Medical {
 
     public LocalDate getMedicalDate() { return medicalDate; }
     public void setMedicalDate(LocalDate medicalDate) { this.medicalDate = medicalDate; }
+
+    public LocalDate getFromDate() { return fromDate != null ? fromDate : medicalDate; }
+    public void setFromDate(LocalDate fromDate) { this.fromDate = fromDate; this.medicalDate = fromDate; }
+
+    public LocalDate getToDate() { return toDate != null ? toDate : medicalDate; }
+    public void setToDate(LocalDate toDate) { this.toDate = toDate; }
+
+    public LocalDateTime getSubmittedAt() { return submittedAt; }
+    public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
 
     public String getReason() { return reason; }
     public void setReason(String reason) { this.reason = reason; }

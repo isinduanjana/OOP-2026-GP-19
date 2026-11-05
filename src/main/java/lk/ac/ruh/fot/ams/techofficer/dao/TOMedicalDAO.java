@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lk.ac.ruh.fot.ams.config.AppConfig;
 import lk.ac.ruh.fot.ams.dao.BaseDAO;
 import lk.ac.ruh.fot.ams.dao.CrudDAO;
 import lk.ac.ruh.fot.ams.dao.MedicalDAO;
@@ -16,13 +15,12 @@ import lk.ac.ruh.fot.ams.model.enums.MedicalStatus;
 import lk.ac.ruh.fot.ams.techofficer.DuplicateMedicalException;
 import lk.ac.ruh.fot.ams.techofficer.model.MedicalDecision;
 
-
+/** Medical CRUD and validation for the Technical Officer module. */
 public class TOMedicalDAO extends BaseDAO implements CrudDAO<Medical> {
 
-    // ================================================================= read
     @Override
     public List<Medical> findAll() throws DatabaseException {
-        return queryList(MedicalDAO.BASE_SELECT + "ORDER BY m.medical_date DESC, s.tg_no", MedicalDAO::mapMedical);
+        return queryList(MedicalDAO.BASE_SELECT + "ORDER BY m.from_date DESC, s.tg_no", MedicalDAO::mapMedical);
     }
 
     @Override
@@ -31,7 +29,7 @@ public class TOMedicalDAO extends BaseDAO implements CrudDAO<Medical> {
     }
 
     public List<Medical> findPending() throws DatabaseException {
-        return queryList(MedicalDAO.BASE_SELECT + "WHERE m.status = 'PENDING' ORDER BY m.medical_date, s.tg_no",
+        return queryList(MedicalDAO.BASE_SELECT + "WHERE m.status = 'PENDING' ORDER BY m.from_date, s.tg_no",
                 MedicalDAO::mapMedical);
     }
 
@@ -39,36 +37,33 @@ public class TOMedicalDAO extends BaseDAO implements CrudDAO<Medical> {
         return (int) queryNumber("SELECT COUNT(*) FROM medicals WHERE status = ?", status);
     }
 
-    /** How many medicals this user approved / rejected. */
     public int countHandledBy(int userId) throws DatabaseException {
         return (int) queryNumber("SELECT COUNT(*) FROM medicals WHERE approved_by = ?", userId);
     }
 
-    /** Number of absences a medical is linked to. */
     public int countLinkedAbsences(int medicalId) throws DatabaseException {
         return (int) queryNumber("SELECT COUNT(*) FROM attendance WHERE medical_id = ?", medicalId);
     }
 
-    // ================================================================= write
-    /** Adds a medical (validated) and links it to the absences of that day. Returns the new id. */
+    /** Inserts a medical and links every absent session in its date range. */
     @Override
     public int insert(Medical m) throws DatabaseException {
-        // CrudDAO only allows DatabaseException, so the checked validation is done in add(...)
         int[] id = new int[1];
         inTransaction(c -> {
-            id[0] = insert(c, "INSERT INTO medicals (student_id, course_id, medical_date, reason, document_path, status, "
-                            + "approved_by, approved_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                    m.getStudentId(), m.getCourseId(), m.getMedicalDate(), m.getReason(), m.getDocumentPath(),
-                    m.getStatus(), m.getApprovedBy(), m.getApprovedAt());
-            TOAttendanceDAO.relinkStudentDay(c, m.getStudentId(), m.getMedicalDate());
+            id[0] = insert(c,
+                    "INSERT INTO medicals (student_id, course_id, medical_date, from_date, to_date, reason, "
+                    + "document_path, status, approved_by, approved_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    m.getStudentId(), m.getCourseId(), m.getFromDate(), m.getFromDate(), m.getToDate(),
+                    m.getReason(), m.getDocumentPath(), m.getStatus(), m.getApprovedBy(), m.getApprovedAt());
+            TOAttendanceDAO.relinkStudentRange(c, m.getStudentId(), m.getFromDate(), m.getToDate());
         });
         m.setMedicalId(id[0]);
         return id[0];
     }
 
-    /** Validates (future date, duplicates) and then inserts. */
+    /** New submissions must satisfy the 14-day deadline. */
     public int add(Medical m) throws AppException {
-        validate(m);
+        validate(m, true);
         return insert(m);
     }
 
@@ -76,20 +71,21 @@ public class TOMedicalDAO extends BaseDAO implements CrudDAO<Medical> {
     public void update(Medical m) throws DatabaseException {
         Medical old = findById(m.getMedicalId());
         inTransaction(c -> {
-            update(c, "UPDATE medicals SET student_id = ?, course_id = ?, medical_date = ?, reason = ?, document_path = ? "
-                            + "WHERE medical_id = ?",
-                    m.getStudentId(), m.getCourseId(), m.getMedicalDate(), m.getReason(), m.getDocumentPath(),
-                    m.getMedicalId());
-            // first free the old day's absences, then link the (possibly new) day
+            update(c, "UPDATE medicals SET student_id = ?, course_id = ?, medical_date = ?, from_date = ?, "
+                    + "to_date = ?, reason = ?, document_path = ? WHERE medical_id = ?",
+                    m.getStudentId(), m.getCourseId(), m.getFromDate(), m.getFromDate(), m.getToDate(),
+                    m.getReason(), m.getDocumentPath(), m.getMedicalId());
             update(c, "UPDATE attendance SET medical_id = NULL WHERE medical_id = ?", m.getMedicalId());
-            if (old != null) TOAttendanceDAO.relinkStudentDay(c, old.getStudentId(), old.getMedicalDate());
-            TOAttendanceDAO.relinkStudentDay(c, m.getStudentId(), m.getMedicalDate());
+            if (old != null) {
+                TOAttendanceDAO.relinkStudentRange(c, old.getStudentId(), old.getFromDate(), old.getToDate());
+            }
+            TOAttendanceDAO.relinkStudentRange(c, m.getStudentId(), m.getFromDate(), m.getToDate());
         });
     }
 
-    /** Validates and then updates. */
+    /** Editing an existing record does not reset or re-apply the original submission deadline. */
     public void save(Medical m) throws AppException {
-        validate(m);
+        validate(m, false);
         update(m);
     }
 
@@ -99,11 +95,11 @@ public class TOMedicalDAO extends BaseDAO implements CrudDAO<Medical> {
         inTransaction(c -> {
             update(c, "UPDATE attendance SET medical_id = NULL WHERE medical_id = ?", id);
             update(c, "DELETE FROM medicals WHERE medical_id = ?", id);
-            // another medical of that day may now cover the absence
-            if (old != null) TOAttendanceDAO.relinkStudentDay(c, old.getStudentId(), old.getMedicalDate());
+            if (old != null) {
+                TOAttendanceDAO.relinkStudentRange(c, old.getStudentId(), old.getFromDate(), old.getToDate());
+            }
         });
     }
-
 
     public void applyDecision(Medical m, MedicalDecision decision, int deciderUserId) throws AppException {
         if (!decision.isAllowedFor(m)) {
@@ -114,23 +110,30 @@ public class TOMedicalDAO extends BaseDAO implements CrudDAO<Medical> {
         inTransaction(c -> {
             update(c, "UPDATE medicals SET status = ?, approved_by = ?, approved_at = ? WHERE medical_id = ?",
                     decision.getResultStatus(), by, at, m.getMedicalId());
-            TOAttendanceDAO.relinkStudentDay(c, m.getStudentId(), m.getMedicalDate());
+            TOAttendanceDAO.relinkStudentRange(c, m.getStudentId(), m.getFromDate(), m.getToDate());
         });
         m.setStatus(decision.getResultStatus());
         m.setApprovedBy(by);
         m.setApprovedAt(at);
     }
 
-    // ================================================================= validation
-    private void validate(Medical m) throws AppException {
+    private void validate(Medical m, boolean newSubmission) throws AppException {
         if (m.getStudentId() <= 0) throw new ValidationException("Student", "Please choose a student.");
-        if (m.getMedicalDate() == null) throw new ValidationException("Date", "Medical date is required.");
-        if (m.getMedicalDate().isAfter(LocalDate.now())) {
-            throw new ValidationException("Date", "A medical cannot be added for a future date (" + m.getMedicalDate() + ").");
+        LocalDate from = m.getFromDate();
+        LocalDate to = m.getToDate();
+        LocalDate today = LocalDate.now();
+        if (from == null || to == null) {
+            throw new ValidationException("Date", "From Date and To Date are required.");
         }
-        if (m.getMedicalDate().isBefore(LocalDate.now().minusYears(2))) {
-            throw new ValidationException("Date", "The medical date is too old for the academic year "
-                    + AppConfig.CURRENT_ACADEMIC_YEAR + ".");
+        if (from.isAfter(to)) {
+            throw new ValidationException("Date", "To Date cannot be before From Date.");
+        }
+        if (to.isAfter(today)) {
+            throw new ValidationException("Date", "Medical dates cannot be in the future.");
+        }
+        if (newSubmission && from.isBefore(today.minusDays(14))) {
+            throw new ValidationException("Invalid Medical",
+                    "Medical submission period has expired. Submit the medical within 14 days from the first absent date.");
         }
         if (m.getReason() == null || m.getReason().isBlank()) {
             throw new ValidationException("Reason", "Reason is required.");
@@ -138,11 +141,13 @@ public class TOMedicalDAO extends BaseDAO implements CrudDAO<Medical> {
         if (m.getReason().length() > 1000) {
             throw new ValidationException("Reason", "Reason is too long (max 1000 characters).");
         }
-        Integer existing = queryOne("SELECT medical_id FROM medicals WHERE student_id = ? AND medical_date = ? "
-                        + "AND course_id <=> ? AND medical_id <> ?",
-                rs -> rs.getInt(1), m.getStudentId(), m.getMedicalDate(), m.getCourseId(), m.getMedicalId());
+
+        Integer existing = queryOne(
+                "SELECT medical_id FROM medicals WHERE student_id = ? AND from_date <= ? AND to_date >= ? "
+                + "AND course_id <=> ? AND medical_id <> ? LIMIT 1",
+                rs -> rs.getInt(1), m.getStudentId(), to, from, m.getCourseId(), m.getMedicalId());
         if (existing != null) {
-            throw new DuplicateMedicalException(m.getTgNo(), m.getMedicalDate(),
+            throw new DuplicateMedicalException(m.getTgNo(), from,
                     m.getCourseId() == null ? "all courses" : m.getCourseCode(), existing);
         }
     }

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.io.File;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,9 @@ public class MedicalDialog extends RecordEntryDialog<Medical> {
     private final JTextField studentSearch = UI.searchField("Filter by TG no or name");
     private final JComboBox<Undergraduate> studentBox = new JComboBox<>();
     private final JComboBox<Object> courseBox = new JComboBox<>();
-    private JSpinner dateSpinner;
+    private JSpinner fromDateSpinner;
+    private JSpinner toDateSpinner;
+    private final JLabel submissionDateLabel = UI.muted(LocalDate.now().toString());
     private final JTextArea reasonArea = UI.textArea(3);
     private final JLabel documentLabel = UI.muted("No document attached");
     private final JCheckBox approveNow = new JCheckBox("Approve immediately (document checked)");
@@ -115,7 +118,11 @@ public class MedicalDialog extends RecordEntryDialog<Medical> {
         }
         fillCourses();
 
-        dateSpinner = dateSpinner(existing == null ? null : existing.getMedicalDate());
+        fromDateSpinner = dateSpinner(existing == null ? null : existing.getFromDate());
+        toDateSpinner = dateSpinner(existing == null ? null : existing.getToDate());
+        if (existing != null && existing.getSubmittedAt() != null) {
+            submissionDateLabel.setText(existing.getSubmittedAt().toLocalDate().toString());
+        }
         if (existing != null) reasonArea.setText(existing.getReason());
         JScrollPane reasonScroll = new JScrollPane(reasonArea);
         reasonScroll.setPreferredSize(new Dimension(360, 72));
@@ -133,14 +140,15 @@ public class MedicalDialog extends RecordEntryDialog<Medical> {
         docRow.add(documentLabel, BorderLayout.CENTER);
         docRow.add(UI.row(choose, remove), BorderLayout.EAST);
 
-        for (JComponent c : new JComponent[]{studentSearch, studentBox, courseBox, dateSpinner}) {
+        for (JComponent c : new JComponent[]{studentSearch, studentBox, courseBox, fromDateSpinner, toDateSpinner, submissionDateLabel}) {
             c.setPreferredSize(new Dimension(360, 34));
         }
         approveNow.setOpaque(false);
         approveNow.setVisible(existing == null);
 
-        return UI.form(new String[]{"Search", "Student", "Course", "Medical date", "Reason", "Document", ""},
-                studentSearch, studentBox, courseBox, dateSpinner, reasonScroll, docRow, approveNow);
+        return UI.form(new String[]{"Search", "Student", "Course", "From Date", "To Date", "Submission Date", "Reason", "Document", ""},
+                studentSearch, studentBox, courseBox, fromDateSpinner, toDateSpinner,
+                submissionDateLabel, reasonScroll, docRow, approveNow);
     }
 
     /** Fills the student combo with students matching the search text. */
@@ -230,7 +238,17 @@ public class MedicalDialog extends RecordEntryDialog<Medical> {
             m.setCourseId(course.getCourseId());
             m.setCourseCode(course.getCourseCode());
         }
-        m.setMedicalDate(readDate(dateSpinner));
+        LocalDate fromDate = readDate(fromDateSpinner);
+        LocalDate toDate = readDate(toDateSpinner);
+        if (fromDate.isAfter(toDate)) {
+            throw new ValidationException("Date", "To Date cannot be before From Date.");
+        }
+        if (toDate.isAfter(LocalDate.now())) {
+            throw new ValidationException("Date", "Medical dates cannot be in the future.");
+        }
+        m.setFromDate(fromDate);
+        m.setToDate(toDate);
+        m.setMedicalDate(fromDate); // keep compatibility with existing screens
         m.setReason(Validator.required(reasonArea.getText(), "Reason"));
         m.setDocumentPath(documentPath);
         if (existing == null && approveNow.isSelected()) {
@@ -244,7 +262,7 @@ public class MedicalDialog extends RecordEntryDialog<Medical> {
     @Override
     protected void save(Medical m) throws AppException {
         if (existing == null) {
-            dao.add(m);      // validates (future date, DuplicateMedicalException) + links absences
+            dao.add(m);      // validates the 14-day deadline and links absences in the full date range
         } else {
             dao.save(m);
         }

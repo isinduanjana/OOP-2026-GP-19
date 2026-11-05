@@ -176,6 +176,8 @@ CREATE TABLE medicals (
     student_id    INT NOT NULL,
     course_id     INT NULL,                        -- NULL = covers every course on that date
     medical_date  DATE NOT NULL,
+    from_date     DATE NOT NULL,
+    to_date       DATE NOT NULL,
     reason        TEXT,
     document_path VARCHAR(255),
     status        ENUM('PENDING','APPROVED','REJECTED') NOT NULL DEFAULT 'PENDING',
