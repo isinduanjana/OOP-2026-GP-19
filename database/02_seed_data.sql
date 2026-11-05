@@ -171,18 +171,18 @@ INSERT INTO course_lecturers (course_lecturer_id, course_id, lecturer_id) VALUES
   (17, 15, 2),
   (18, 16, 6);
 
-INSERT INTO course_materials (material_id, course_id, lecturer_id, title, file_path, uploaded_at) VALUES
-  (1, 11, 1, 'Lecture 01 - Introduction & Complexity', 'uploads/materials/Lecture_01_-_Introduction_&_Complexity.pdf', '2026-07-07 10:01:00'),
-  (2, 11, 1, 'Lecture 02 - Linked Lists', 'uploads/materials/Lecture_02_-_Linked_Lists.pdf', '2026-07-15 10:02:00'),
-  (3, 11, 1, 'Lab Sheet 01', 'uploads/materials/Lab_Sheet_01.pdf', '2026-07-20 10:03:00'),
-  (4, 12, 3, 'Lecture 01 - Classes and Objects', 'uploads/materials/Lecture_01_-_Classes_and_Objects.pdf', '2026-07-07 10:04:00'),
-  (5, 12, 3, 'Lecture 02 - Inheritance', 'uploads/materials/Lecture_02_-_Inheritance.pdf', '2026-07-15 10:05:00'),
-  (6, 13, 1, 'Practical 01 - Swing Basics', 'uploads/materials/Practical_01_-_Swing_Basics.pdf', '2026-07-06 10:06:00'),
-  (7, 13, 1, 'Practical 02 - JDBC with MySQL', 'uploads/materials/Practical_02_-_JDBC_with_MySQL.pdf', '2026-07-14 10:07:00'),
-  (8, 13, 1, 'Mini Project Guidelines', 'uploads/materials/Mini_Project_Guidelines.pdf', '2026-07-22 10:08:00'),
-  (9, 14, 4, 'UML Class Diagrams', 'uploads/materials/UML_Class_Diagrams.pdf', '2026-07-06 10:09:00'),
-  (10, 15, 2, 'Lecture 01 - HTTP and REST', 'uploads/materials/Lecture_01_-_HTTP_and_REST.pdf', '2026-07-07 10:10:00'),
-  (11, 16, 6, 'Technical Report Writing Guide', 'uploads/materials/Technical_Report_Writing_Guide.pdf', '2026-07-08 10:11:00');
+INSERT INTO course_materials (material_id, course_id, lecturer_id, title, file_path, covers_from, covers_to, uploaded_at) VALUES
+  (1, 11, 1, 'Lecture 01 - Introduction & Complexity', 'uploads/materials/Lecture_01_-_Introduction_&_Complexity.pdf', '2026-07-06', '2026-07-10', '2026-07-07 10:01:00'),
+  (2, 11, 1, 'Lecture 02 - Linked Lists', 'uploads/materials/Lecture_02_-_Linked_Lists.pdf', '2026-07-13', '2026-07-17', '2026-07-15 10:02:00'),
+  (3, 11, 1, 'Lab Sheet 01', 'uploads/materials/Lab_Sheet_01.pdf', '2026-07-20', '2026-07-24', '2026-07-20 10:03:00'),
+  (4, 12, 3, 'Lecture 01 - Classes and Objects', 'uploads/materials/Lecture_01_-_Classes_and_Objects.pdf', '2026-07-06', '2026-07-10', '2026-07-07 10:04:00'),
+  (5, 12, 3, 'Lecture 02 - Inheritance', 'uploads/materials/Lecture_02_-_Inheritance.pdf', '2026-07-13', '2026-07-17', '2026-07-15 10:05:00'),
+  (6, 13, 1, 'Practical 01 - Swing Basics', 'uploads/materials/Practical_01_-_Swing_Basics.pdf', '2026-07-06', '2026-07-10', '2026-07-06 10:06:00'),
+  (7, 13, 1, 'Practical 02 - JDBC with MySQL', 'uploads/materials/Practical_02_-_JDBC_with_MySQL.pdf', '2026-07-13', '2026-07-17', '2026-07-14 10:07:00'),
+  (8, 13, 1, 'Mini Project Guidelines', 'uploads/materials/Mini_Project_Guidelines.pdf', '2026-07-20', '2026-07-24', '2026-07-22 10:08:00'),
+  (9, 14, 4, 'UML Class Diagrams', 'uploads/materials/UML_Class_Diagrams.pdf', '2026-07-06', '2026-07-10', '2026-07-06 10:09:00'),
+  (10, 15, 2, 'Lecture 01 - HTTP and REST', 'uploads/materials/Lecture_01_-_HTTP_and_REST.pdf', '2026-07-06', '2026-07-10', '2026-07-07 10:10:00'),
+  (11, 16, 6, 'Technical Report Writing Guide', 'uploads/materials/Technical_Report_Writing_Guide.pdf', '2026-07-06', '2026-07-10', '2026-07-08 10:11:00');
 
 INSERT INTO enrollments (enrollment_id, student_id, course_id, academic_year, semester, status) VALUES
   (1, 1, 1, '2024/2025', 1, 'COMPLETED'),

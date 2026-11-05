@@ -9,6 +9,7 @@
 --    * undergraduates.level              -> which level the student is in
 --    * attendance_sessions.hours         -> 1 session = 2 hours (handout rule)
 --    * grades.academic_year / remarks    -> published result history
+--    * course_materials.covers_from / covers_to -> date range a material covers
 --  Run this file first, then 02_seed_data.sql
 --  (The application also runs both automatically on first start.)
 -- =====================================================================
@@ -117,8 +118,11 @@ CREATE TABLE course_materials (
     lecturer_id INT NULL,
     title       VARCHAR(100) NOT NULL,
     file_path   VARCHAR(255),
+    covers_from DATE NULL,                         -- ADDED: first date the material covers
+    covers_to   DATE NULL,                         -- ADDED: last date the material covers
     uploaded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_cm_course   FOREIGN KEY (course_id)   REFERENCES courses(course_id)     ON DELETE CASCADE,
+    CONSTRAINT chk_cm_dates CHECK (covers_to IS NULL OR covers_from IS NULL OR covers_to >= covers_from),
+    CONSTRAINT fk_cm_course  FOREIGN KEY (course_id)   REFERENCES courses(course_id)     ON DELETE CASCADE,
     CONSTRAINT fk_cm_lecturer FOREIGN KEY (lecturer_id) REFERENCES lecturers(lecturer_id) ON DELETE SET NULL
 );
 
